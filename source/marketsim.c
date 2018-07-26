@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "simulator.h"
+#include "marketsim.h"
 
 // Create a new stock.
 Stock* createStock(char* ticker, double price, double totalShares, Stock* next) {
@@ -259,6 +259,27 @@ void printMarket(Market* market) {
     current = market->head;
     while (current != NULL) {
         printStock(current);
+        current = current->next;
+    }
+}
+
+// Adjust prices in a market.
+void updateMarket(Market* market) {
+    Stock* current;
+    double multiplier;
+    double perturbation;
+
+    if (market == NULL) {
+        return;
+    }
+
+    current = market->head;
+    while (current != NULL) {
+        perturbation = 1 / current->price;
+        multiplier = ((double) rand()) / RAND_MAX * perturbation;
+        multiplier -= perturbation / 2 - 1;
+
+        current->price *= multiplier;
         current = current->next;
     }
 }
@@ -585,6 +606,9 @@ void mainMenu(Market* market, Portfolio* portfolio) {
 
             // Update the market.
             case 'u':
+                updateMarket(market);
+                printf("New market:\n");
+                printMarket(market);
                 break;
 
             // Quit the simulator.
@@ -628,6 +652,8 @@ int main(int argCount, char** argVector) {
 
         return -1;
     }
+
+    updateMarket(market);
 
     mainMenu(market, portfolio);
 

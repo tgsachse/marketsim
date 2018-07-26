@@ -48,6 +48,7 @@ Stock* getStock(Market*, char*);
 int buyStock(Market*, Portfolio*, char*, double);
 int sellStock(Market*, Portfolio*, char*, double);
 void printMarket(Market*);
+void updateMarket(Market*);
 int saveMarket(Market*, char*);
 void destroyMarket(Market*);
 Share* createShare(char*, double, Share*);
